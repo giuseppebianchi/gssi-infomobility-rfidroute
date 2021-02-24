@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .jumbotron.jumbotron-fluid
+    .container#loginTitle
+      h1= title
+      p.lead Benvenuto nell'area admin di Infomobilità AQ
+      br
+    .container#loginContainer
+      form#loginForm(method="POST", action="users/login")
+        .form-group
+          label(for='loginFormUsername') Username
+          input#loginFormUsername.form-control(type='text', name="username", required)
+        .form-group
+          label(for='loginFormPassword') Password
+          input#loginFormPassword.form-control(type='password', name="password", required)
+        .form-group.form-check
+          //input#LoginFormaKeppSession.form-check-input(type='checkbox', name="keep_session", value=1)
+          //label.form-check-label(for='LoginFormaKeppSession') Resta Connesso
+        button#loginButton.btn.btn-primary.btn-block(type='submit') Entra
+  .container#sponsorContainer
+    figure.figure
+      img.figure-img.img-fluid.rounded(src="images/163271306190O__Olaquila.png")
+    figure.figure
+      img.figure-img.img-fluid.rounded(src="images/Logo_AMA.jpg")
+    figure.figure
+      img.figure-img.img-fluid.rounded(src="images/GSSI-Logo-R.png")

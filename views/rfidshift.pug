@@ -1,0 +1,97 @@
+extends layout
+
+append body
+    script(src='javascripts/scripts-rfidshift.js')
+
+block content
+    .jumbotron.jumbotron-fluid
+        .container
+            p Utente loggato:
+                span.logged_user= loggedUser.username
+            h1= title
+            p Si associa ogni turno di ciascun servizio ad una card RFID
+            br
+            button#newRfidButton.btn.btn-primary(type="button") Aggiungi RFID
+    .container
+        #alertSection
+        .row
+            .col-sm-8
+                label.my-1.mr-2(for='orderSelect') Servizio
+                    select#filterSelectSchedule.custom-select.my-1.mr-sm-2
+                        option(selected='' value="0") Tutti
+                        each schedule in schedule_list
+                            option(value=schedule.schedule_id) #{schedule.schedule_name}
+            .col-sm-4
+                label.my-1.mr-2(for='orderSelect') Ordina per
+                select#orderSelect.custom-select.my-1.mr-sm-2
+                    option(selected='' value="rfid_created") Inserimento
+                    option(value="rfid_code") RFID
+                    option(value="shift.shift_code") Codice Turno
+                    option(value="shift.shift_number") Numero Turno
+                    option(value="shift.schedule_fk") Servizio
+        br
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') #RFID
+                    th(scope='col') ID TURNO
+                    th(scope='col') CODICE TURNO
+                    th(scope='col') NUMERO TURNO
+                    th(scope='col') SERVIZIO
+                    th(scope='col') DATA
+                    th(scope='col')
+            tbody#rfidTable
+                each rfid in rfid_list
+                    - var html_id = "rfidshift_" + rfid.rfid_id
+                    tr(id=html_id)
+                        th(scope='row') #{rfid.rfid_code}
+                        td.shift_id-field #{rfid.rs_shift_fk}
+                        if rfid.shift
+                            td.shift_code-field #{rfid.shift.shift_code}
+                            td.shift_number-field #{rfid.shift.shift_number}
+                            td.schedule_name-field #{rfid.shift.schedule.schedule_name}
+                        else
+                            td.shift_code-field
+                            td.shift_number-field
+                            td.schedule_name-field
+                        td.rfid_created-field #{moment(rfid.rfid_created).format()}
+                        td
+                            a.edit-button(href="#", data-edit=rfid) Modifica
+                else
+                    tr
+
+    #newRfidModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newRfidModalLabel' aria-hidden='true' data-backdrop="static")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#newRfidModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #alertModal
+                    form#addNewRfidForm
+                        .form-group
+                            p Si prega di inserire il codice RFID rispettando il maiuscolo e minuscolo dei caratteri alfabetici.
+                            label(for='inputRFID' class="font-weight-bold") Codice RFID
+                            label#rfidLabel.rfid_code_message
+                            input#inputRFID.form-control(type="text", placeholder="Inserisci Codice RFID", required="", autocomplete="off", maxlength=12)
+                        .row
+                            .col-sm-6
+                                .form-group
+                                    label(for='selectSchedule' class="font-weight-bold") Servizio
+                                    label#edit-label-schedule(class="edit-label")
+                                    select#selectSchedule.form-control(required="")
+                                        option
+                                        each schedule in schedule_list
+                                            option(value=schedule.schedule_id) #{schedule.schedule_name}
+                            .col-sm-6
+                                .form-group
+                                    label(for='selectShift' class="font-weight-bold") Turno
+                                    label#edit-label-tripshift(class="edit-label")
+                                    select#selectShift.form-control(required="", disabled="")
+                        br
+                        .modal-footer(style="justify-content: space-between")
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Annulla
+                            button#addNewRfid.btn.btn-success.btn-lg(type='submit', disabled="", style="display: none") Salva
+                            button#updateRfid.btn.btn-success.btn-lg(type='submit', style="display: none") Modifica
+                            button#deleteRfid.btn.btn-danger.btn(type='submit', style="display: none") Elimina

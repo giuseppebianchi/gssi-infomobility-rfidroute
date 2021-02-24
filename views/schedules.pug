@@ -1,0 +1,81 @@
+extends layout
+
+append body
+    script(src='javascripts/scripts-schedules.js')
+
+block content
+    .jumbotron.jumbotron-fluid
+        .container
+            p Utente loggato:
+                span.logged_user= loggedUser.username
+            h1= title
+            p I servizi che possono essere impiegati durante l'anno, in base all'orario in vigore.
+            br
+            button#newScheduleButton.btn.btn-primary(type="button", disabled="") Aggiungi Servizio
+    .container
+        #alertSection
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') ID
+                    th(scope='col') Nome
+                    th(scope='col') Descrizione
+                    th(scope='col') Stato
+                    th(scope='col') Creato
+                    th(scope='col')
+            tbody#scheduleTable
+                each schedule in schedules_list
+                    - var html_id = "schedule_" + schedule.schedule_id
+                    tr(id=html_id)
+                        th(scope='row') #{schedule.schedule_id}
+                        td.email-field #{schedule.schedule_name}
+                        td.schedule_name-field #{schedule.schedule_desc}
+                        td.schedule_active-field #{schedule.schedule_active ? "In Vigore" : null}
+                        td.schedule_created-field=moment(schedule.schedule_created).format("DD/MM/YYYY, H:mm")
+                        td
+                            if !schedule.schedule_active
+                                a.set-active-schedule(href="#", data-edit=schedule, data-id=schedule.schedule_id) Attiva
+                else
+                    tr
+
+    #newScheduleModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newScheduleModalLabel' aria-hidden='true' data-backdrop="static")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#newScheduleModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #alertModal
+                    form#addNewScheduleForm
+                        .form-group
+                            label(for='inputUsername' class="font-weight-bold") Username
+                            label#usernameLabel.label_message
+                            input#inputUsername.form-control(type="text", maxlength="45" placeholder="Inserisci Username", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputEmail' class="font-weight-bold") Email
+                            label#emailLabel.label_message
+                            input#inputEmail.form-control(type="email", placeholder="Email", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputPassword' class="font-weight-bold") Password
+                            label#passwordLabel.label_message
+                            input#inputPassword.form-control(type="password", maxlength="45" placeholder="Inserisci Password", required="", autocomplete="off")
+                        .form-group
+                            input#inputConfirmPassword.form-control(type="password", placeholder="Conferma Password", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputFirstName' class="font-weight-bold") Nome
+                            input#inputFirstName.form-control(type="text", maxlength="45" placeholder="Nome", autocomplete="off")
+                        .form-group
+                            label(for='inputLastName' class="font-weight-bold") Cognome
+                            input#inputLastName.form-control(type="text", maxlength="45" placeholder="Cognome", autocomplete="off")
+                        .form-group
+                            label(for='selectRole' class="font-weight-bold") Ruolo
+                            select#selectRole.form-control(required="")
+                                option(value="1") Gestore
+                                option(value="2") Amministratore
+                        br
+                        .modal-footer(style="justify-content: space-between")
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Annulla
+                            button#addNewSchedule.btn.btn-success.btn-lg(type='submit', style="display: none") Salva
+                            button#updateSchedule.btn.btn-success.btn-lg(type='submit', style="display: none") Modifica
+                            button#deleteSchedule.btn.btn-danger.btn(type='submit', style="display: none") Elimina

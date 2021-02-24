@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    title="Infomobilità L'Aquila - Admin"
+
+    meta(charset="utf-8")
+    //base(href="/rfidroute/")
+    base(href="/")
+    link(rel="shortcut icon", href="favicon.ico")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    link(rel='stylesheet', href='fonts/fontawesome/css/all.min.css')
+    link(rel='stylesheet', href='css/bootstrap.min.css')
+    block head
+    link(rel='stylesheet', href='stylesheets/style.css')
+  body
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .container
+        a.navbar-brand(href='#') Infomobilità AQ
+        if loggedUser
+          button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+          #navbarSupportedContent.collapse.navbar-collapse
+            ul.navbar-nav.mr-auto
+              li.nav-item
+                a.nav-link(href='')
+                  | HOME
+                  span.sr-only (current)
+              li.nav-item
+                a.nav-link(href='dashboard') DASHBOARD
+              li.nav-item
+                a.nav-link(href='rfid/rfidshift/schedules') SERVIZI
+              li.nav-item
+                a.nav-link(href='rfid/rfidshift/shift') TURNI
+              li.nav-item
+                a.nav-link(href='rfid/rfidshift/tripshift') CORSE
+              li.nav-item
+                a.nav-link(href='rfid/rfidshift/cardrfid') RFID
+            form#navbarForm.form-inline.my-2.my-lg-0
+              input#searchBox.form-control.mr-sm-2(type='search' placeholder='Cerca' aria-label='Cerca')
+            ul.nav.justify-content-end
+              li.nav-item.dropdown
+                a#navbarProfileDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')= loggedUser.username
+                .dropdown-menu(aria-labelledby='navbarProfileDropdown')
+                  if loggedUser.role == 2
+                    a.dropdown-item(href='settings') Impostazioni
+                    a.dropdown-item(href='users') Utenti
+                    .dropdown-divider
+                  a.dropdown-item.text-danger(href='users/logout') Logout
+    block content
+    footer.bd-footer
+      .container.p-3.p-md-5
+
+    script(src='javascripts/config.js')
+    script(src='js/jquery.min.js')
+    script(src='js/bootstrap.min.js')
+    script(src='js/moment.min.js')
+    block body

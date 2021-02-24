@@ -1,0 +1,76 @@
+extends layout
+
+block content
+  .jumbotron.jumbotron-fluid
+    .container
+        h1= title
+        br
+        p Utente loggato:
+          span.logged_user= loggedUser.username
+  .container
+    //-
+      .row
+        .col-sm-12
+          .card.text-white.bg-success
+            .card-header REALTIME
+            .card-body
+              h5.card-title
+                a(href="/rfid/tripname") RFID - Tripname
+              p.card-textLa Si associa l'RFID alla
+                strong  trip_name - Corsa
+      br
+    .row
+
+    br
+    .row
+      .col-sm-6
+        .card.text-white.bg-primary
+          .card-header RFIDShift - RFID Turno
+          .card-body
+            h5.card-title
+              a(href="rfid/rfidshift/cardrfid") RFID
+            p.card-text Le card associate ai Turni
+      .col-sm-6
+        .card.text-white.bg-info
+          .card-header Shift - Schede Turnazioni
+          .card-body
+            h5.card-title
+              a(href="rfid/rfidshift/shift") Turni
+            p.card-text I Turni forniti dall'agenzia
+    br
+    .row
+      .col-sm-6
+        .card.text-white.bg-success
+          .card-header TripShift - Corse Turno
+          .card-body
+            h5.card-title
+              a(href="rfid/rfidshift/tripshift") Corse
+            p.card-textLa Corse effettuate in un
+              strong  Turno
+      .col-sm-6
+        .card.bg-light
+          .card-header Schedule - Gruppi di Turni
+          .card-body
+            h5.card-title
+              a.text-black-50(href="rfid/rfidshift/schedules") Servizi
+            p.card-text Servizi impiegati durante l'anno
+    br
+    br
+    if loggedUser.role == 2
+      .row
+        .col-sm-6
+          .card.text-white.bg-warning
+            .card-header SYSTEM
+            .card-body
+              h5.card-title
+                a(href="users") Utenti
+              p.card-text
+                | Gestione degli utenti che possono accedere ad Infomobilità L'Aquila
+        .col-sm-6
+          .card.text-white.bg-dark
+            .card-header INFOMOBILITY
+            .card-body
+              h5.card-title
+                a(href="settings") Impostazioni
+              p.card-text
+                | Parametri di configurazione per tutti i sistemi di Infomobilità L'Aquila

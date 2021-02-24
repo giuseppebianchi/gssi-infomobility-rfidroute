@@ -1,0 +1,101 @@
+extends layout
+
+append body
+    script(src='javascripts/scripts-shift.js')
+
+block content
+    .jumbotron.jumbotron-fluid
+        .container
+            p Utente loggato:
+                span.logged_user= loggedUser.username
+            h1= title
+            p I turni forniti dall'agenzia di trasporto pubblico.
+            br
+            button#newShiftButton.btn.btn-primary(type="button") Aggiungi Turno
+    .container
+        #alertSection
+        .row
+            .col-sm-8
+                label.my-1.mr-2(for='filterSelectSchedule') Servizio
+                    select#filterSelectSchedule.custom-select.my-1.mr-sm-2
+                        option(selected='' value="0") Tutte
+                        each schedule in schedule_list
+                            option(value=schedule.schedule_id) #{schedule.schedule_name}
+            .col-sm-4
+                label.my-1.mr-2(for='orderSelect') Ordina per
+                select#orderSelect.custom-select.my-1.mr-sm-2
+                    option(selected='' value="rs_created") Inserimento
+                    option(value="shift_code") Codice Turno
+                    option(value="shift_number") Numero Turno
+                    option(value="schedule_fk") Servizio
+        br
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') #
+                    th(scope='col') CODICE TURNO
+                    th(scope='col') NUMERO TURNO
+                    th(scope='col') SERVIZIO
+                    th(scope='col') INIZIO
+                    th(scope='col') FINE
+                    th(scope='col') CREAZIONE
+                    th(scope='col')
+            tbody#shiftTable
+                each shift in shift_list
+                    - var html_id = "shift_" + shift.shift_id
+                    tr(id=html_id)
+                        th(scope='row').id-field #{shift.shift_id}
+                        td.shift_id-field #{shift.shift_code}
+                        td.shift-field #{shift.shift_number}
+                        if shift.schedule
+                            td.schedule-field #{shift.schedule.schedule_name}
+                        else
+                            td.schedule-field
+                        td.shift_start-field #{shift.shift_start ? moment.utc(shift.shift_start * 1000).format("HH:mm") : ""}
+                        td.shuft_end-field #{shift.shift_end ? moment.utc(shift.shift_end * 1000).format("HH:mm") : "" }
+                        td.created-field #{moment(shift.rs_created).format()}
+                        td
+                            a.edit-button(href="#", data-edit=shift) Modifica
+                else
+                    tr
+
+    #newShiftModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newShiftModalLabel' aria-hidden='true' data-backdrop="static")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#newShiftModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #alertModal
+                    form#addNewShiftForm
+                        .form-group
+                            label(for='inputShiftId' class="font-weight-bold") Codice Turno
+                            label#shiftIdLabel.input_shift_message
+                            input#inputShiftId.form-control.check-shift(type="text", placeholder="Inserisci Codice Turno", required="", autocomplete="off", maxlength=45)
+                        .form-group
+                            label(for='inputShift' class="font-weight-bold") Turno n°
+                            label#shiftLabel.input_shift_message
+                            input#inputShift.form-control.check-shift(type="text", placeholder="Inserisci N° Turno", required="", autocomplete="off", maxlength=45)
+                        .form-group
+                            label(for='selectSchedule' class="font-weight-bold") Servizio
+                            label#edit-label-schedule(class="edit-label")
+                            select#selectSchedule.form-control.check-shift(required="")
+                                option
+                                each schedule in schedule_list
+                                    option(value=schedule.schedule_id) #{schedule.schedule_name}
+                        br
+                        .form-group
+                            p Opzionali
+                            label(for='startShiftTime' class="font-weight-bold") Inizio
+                            //p#edit-label-pattern(class="edit-label")
+                            input#startShiftTime.form-control(type="time", value="00:00")
+                            label(for='endShiftTime' class="font-weight-bold") Fine
+                            //label#edit-label-trip(class="edit-label")
+                            input#endShiftTime.form-control(type="time", value="00:00")
+                        br
+                        .modal-footer(style="justify-content: space-between")
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Annulla
+                            button#addNewShift.btn.btn-success.btn-lg(type='submit', disabled="", style="display: none") Salva
+                            button#updateShift.btn.btn-success.btn-lg(type='submit', style="display: none") Modifica
+                            button#deleteShift.btn.btn-danger.btn(type='submit', style="display: none") Elimina

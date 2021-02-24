@@ -1,0 +1,121 @@
+extends layout
+
+append body
+    script(src='javascripts/scripts-tripshift.js')
+
+block content
+    .jumbotron.jumbotron-fluid
+        .container
+            p Utente loggato:
+                span.logged_user= loggedUser.username
+            h1= title
+            p Le singole corse effettuate nei vari turni
+            br
+            button#newTripShiftButton.btn.btn-primary(type="button") Aggiungi Corsa
+    .container
+        #alertSection
+        .row
+            .col-sm-4
+                label.my-1.mr-2(for='orderSelect') Servizio
+                    select#filterSelectSchedule.custom-select.my-1.mr-sm-2
+                        option(selected='' value="0") Tutti
+                        each schedule in schedule_list
+                            option(value=schedule.schedule_id) #{schedule.schedule_name}
+            .col-sm-4
+                label.my-1.mr-2(for='orderSelect') Turno
+                    select#filterSelectShift.custom-select.my-1.mr-sm-2(disabled="")
+            .col-sm-4
+                label.my-1.mr-2(for='orderSelect') Ordina per
+                select#orderSelect.custom-select.my-1.mr-sm-2
+                    option(selected='' value="ts_created") Inserimento
+                    option(value='trip_id') Trip ID
+                    option(value='trip_name') Corsa
+                    option(value='shift_fk') Turno
+                    option(value='route') Linea
+                    option(value='from') Fermata Partenza
+                    option(value='to') Fermata Arrivo
+        br
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') #
+                    th(scope='col') TRIP ID
+                    th(scope='col') CORSA
+                    th(scope='col') ROUTE
+                    th(scope='col') ID TURNO
+                    th(scope='col') CODICE TURNO
+                    th(scope='col') NUMERO TURNO
+                    th(scope='col') SERVIZIO
+                    th(scope='col') PARTENZA
+                    th(scope='col') ARRIVO
+                    th(scope='col') DA
+                    th(scope='col') A
+                    th(scope='col')
+            tbody#tripshiftTable
+                each corsa in trip_shift_list
+                    - var html_id = "tripshift_" + corsa.trip_shift_id
+                    tr(id=html_id)
+                        th(scope='row').id-field #{corsa.trip_shift_id}
+                        td.trip_id-field #{corsa.trip_id}
+                        td.trip_name-field #{corsa.trip_name}
+                        td.route-field #{corsa.route}
+                        if corsa.shift
+                            td.shift_id-field #{corsa.shift.shift_id}
+                            td.shift_code-field #{corsa.shift.shift_code}
+                            td.shift_number-field #{corsa.shift.shift_number}
+                            td.schedule-field #{corsa.shift.schedule.schedule_name}
+                        else
+                            td.shift_id-field
+                            td.shift_code-field
+                            td.shift_number-field
+                            td.schedule-field
+                        td.departure_time-field= moment.utc(corsa.departure_time*1000).format("HH:mm")
+                        td.arrival_time-field= moment.utc(corsa.arrival_time*1000).format("HH:mm")
+                        td.from-field #{corsa.from}
+                        td.to-field #{corsa.to}
+                        td
+                            a.edit-button(href="#", data-edit=corsa) Modifica
+                else
+                    tr
+
+    #newTripShiftModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newTripShiftModalLabel' aria-hidden='true' data-backdrop="static")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#newTripShiftModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #alertModal
+                    form#addNewTripShiftForm
+                        label#tripshiftLabel
+                        .form-group
+                            label(for='selectRoute' class="font-weight-bold") Linea - Route
+                            label#edit-label-route(class="edit-label")
+                            select#selectRoute.form-control(disabled="", required="")
+                                option
+                        .form-group
+                            label(for='selectPattern' class="font-weight-bold") Percorso - Pattern
+                            //p#edit-label-pattern(class="edit-label")
+                            select#selectPattern.form-control(disabled="", required="")
+                        .form-group
+                            label(for='selectTrip' class="font-weight-bold") Corsa - Trip
+                            label#edit-label-trip(class="edit-label")
+                            select#selectTrip.form-control.check-tripshift(disabled="", required="")
+                        .form-group
+                            label(for='selectSchedule' class="font-weight-bold") Servizio
+                            label#edit-label-schedule(class="edit-label")
+                            select#selectSchedule.form-control(required="")
+                                option
+                                each schedule in schedule_list
+                                    option(value=schedule.schedule_id) #{schedule.schedule_name}
+                        .form-group
+                            label(for='selectShift' class="font-weight-bold") Turno
+                            label#edit-label-tripshift(class="edit-label")
+                            select#selectShift.form-control.check-tripshift(required="", disabled="")
+                        br
+                        .modal-footer(style="justify-content: space-between")
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Annulla
+                            button#addNewTripShift.btn.btn-success.btn-lg(type='submit', disabled="", style="display: none") Salva
+                            button#updateTripShift.btn.btn-success.btn-lg(type='submit', style="display: none") Modifica
+                            button#deleteTripShift.btn.btn-danger.btn(type='submit', style="display: none") Elimina

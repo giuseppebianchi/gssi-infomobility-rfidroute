@@ -1,0 +1,58 @@
+extends layout
+
+append head
+  link(rel='stylesheet', href='/plugins/footable-bootstrap/css/footable.bootstrap.css')
+append body
+  script(src='/plugins/footable-bootstrap/js/footable.js')
+  script(src='/javascripts/table.js')
+block content
+  .container
+    .jumbotron.jumbotron-fluid
+      .container
+        h2 RFID TRIP
+        p Utente loggato:
+          span.logged_user= loggedUser.username
+  .container
+    p La ricerca del RFID per il Real-Time viene effettuata per
+      strong  trip_name
+      | , quindi verranno restituiti più valori di
+      strong  RFID
+      | .
+    table#rfidTripNameTable.table(data-paging="true", data-filtering="true", data-sorting="true")
+  br
+  br
+  #editor-modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='editor-title')
+    .modal-dialog(role='document')
+      form#editor.modal-content.form-horizontal
+        .modal-header
+          h4#editor-title.modal-title Add Row
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') &times;
+        .modal-body
+          .form-group.required
+            label.col-sm-12.control-label(for='rfid_code_input') RFID Code
+            .col-sm-12
+              input#rfid_code_input.form-control(type='text', name='rfid_code_input', placeholder='RFID', required='')
+          .form-group.required
+            label.col-sm-12.control-label(for='trip_name_input') TRIP Name
+            .col-sm-12
+              input#trip_name_input.form-control(type='text', name='trip_name_input', placeholder='Trip', required='')
+          .form-group
+            label.col-sm-12.control-label(for='from_input') Da - Partenza
+            .col-sm-12
+              input#from_input.form-control(type='text', name='from_input', placeholder='Da')
+          .form-group.required
+            label.col-sm-12.control-label(for='to_input') Started On
+            .col-sm-12
+              input#to_input.form-control(type='text', name='to_input', placeholder='A', required='')
+          .form-group
+            label.col-sm-12.control-label(for='route_input') Linea
+            .col-sm-12
+              input#route_input.form-control(type='text', name='route_input', placeholder='Linea')
+          .form-group
+            label.col-sm-12.control-label(for='pattern_input') Pattern ID
+            .col-sm-12
+              input#pattern_input.form-control(type='text', name='pattern_input', placeholder='Pattern ID')
+        .modal-footer
+          button.btn.btn-primary(type='submit') Salva
+          button.btn.btn-default(type='button', data-dismiss='modal') Annulla

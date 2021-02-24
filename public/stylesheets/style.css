@@ -1,0 +1,112 @@
+body {
+  width:100%;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00B7FF;
+}
+*:focus {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+#loginTitle{
+  text-align: center;
+}
+#loginContainer{
+  max-width: 400px;
+}
+#sponsorContainer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#sponsorContainer img{
+  max-width: 150px;
+}
+#navbarForm{
+  margin-bottom: -15px !important;
+}
+#inputRFID{
+  text-transform: uppercase;
+}
+#inputRFID::placeholder{
+  text-transform: capitalize;
+}
+#searchBox{
+  background: none;
+  border: none;
+  border-bottom: 2px solid #ededed;
+  outline: none;
+  font-size: 1em;
+  padding: 0 5px 15px;
+  transition: 0.5s;
+  border-radius: 0;
+}
+#searchBox:focus{
+  border-color: #007bff;
+}
+.logged_user{
+  color: #007bff;
+}
+.form-group > input[type="time"].form-control{
+  width: 30%;
+  margin: 0 10px;
+  display: inline-block;
+}
+.form-group.required .control-label:after {
+  content: "*";
+  color: red;
+  margin-left: 4px;
+}
+.form-control.empty-required-field{
+  border-color: red;
+}
+
+.table .fas.fa-sort,
+.table .fas.fa-sort-amount-down,
+.table .fas.fa-sort-amount-down-alt{
+  float: right
+}
+.btn.btn-primary.footable-add{
+  position: absolute;
+  top: 15px;
+  right: 10px;
+}
+#newRfidModal > .modal-dialog{
+  max-width: 700px;
+}
+.rfid_code_message, .label_message{
+  margin-left: 10px
+}
+.edit-label{
+  color: #00B7FF;
+  font-weight: 600;
+}
+#rfidTable tr, #userTable tr{
+  -webkit-transition: 0.5s;
+  -moz-transition:    0.5s;
+  -o-transition:      0.5s;
+  -ms-transition:     0.5s;
+  transition:         0.5s;
+}
+tbody tr.highlightedRow{
+  background: #007bff !important;
+  color: #fff;
+}
+.trip_id-field{
+  font-weight: 600;
+}
+#textareaSettings{
+  width: 100%;
+  min-height: 20rem;
+  font-family: "Lucida Console", Monaco;
+  margin-bottom:10px;
+}
+h5.card-title > a{
+  text-transform: none;
+  text-decoration: none;
+  color: #fff;
+  outline: none;
+}

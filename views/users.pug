@@ -1,0 +1,81 @@
+extends layout
+
+append body
+    script(src='javascripts/scripts-users.js')
+
+block content
+    .jumbotron.jumbotron-fluid
+        .container
+            h1= title
+            br
+            p Utente loggato:
+                span.logged_user= loggedUser.username
+            p
+            br
+            button#newUserButton.btn.btn-primary(type="button") Aggiungi Utente
+    .container
+        #alertSection
+        table.table.table-striped
+            thead
+                tr
+                    th(scope='col') Username
+                    th(scope='col') Email
+                    th(scope='col') Nome
+                    th(scope='col') Cognome
+                    th(scope='col') Ruolo
+                    th(scope='col') Creato
+                    th(scope='col')
+            tbody#userTable
+                each user in users_list
+                    - var html_id = "user_" + user.username
+                    tr(id=html_id)
+                        th(scope='row') #{user.username}
+                        td.email-field #{user.email}
+                        td.first_name-field #{user.first_name}
+                        td.last_name-field #{user.last_name}
+                        td.role-field #{user.role}
+                        td.created-field=moment(user.created).format("DD/MM/YYYY, H:mm")
+                        td
+                            a.edit-button(href="#", data-edit=user) Modifica
+
+    #newUserModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='newUserModalLabel' aria-hidden='true' data-backdrop="static")
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#newUserModalTitle.modal-title
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    #alertModal
+                    form#addNewUserForm
+                        .form-group
+                            label(for='inputUsername' class="font-weight-bold") Username
+                            label#usernameLabel.label_message
+                            input#inputUsername.form-control(type="text", maxlength="45" placeholder="Inserisci Username", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputEmail' class="font-weight-bold") Email
+                            label#emailLabel.label_message
+                            input#inputEmail.form-control(type="email", placeholder="Email", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputPassword' class="font-weight-bold") Password
+                            label#passwordLabel.label_message
+                            input#inputPassword.form-control(type="password", maxlength="45" placeholder="Inserisci Password", required="", autocomplete="off")
+                        .form-group
+                            input#inputConfirmPassword.form-control(type="password", placeholder="Conferma Password", required="", autocomplete="off")
+                        .form-group
+                            label(for='inputFirstName' class="font-weight-bold") Nome
+                            input#inputFirstName.form-control(type="text", maxlength="45" placeholder="Nome", autocomplete="off")
+                        .form-group
+                            label(for='inputLastName' class="font-weight-bold") Cognome
+                            input#inputLastName.form-control(type="text", maxlength="45" placeholder="Cognome", autocomplete="off")
+                        .form-group
+                            label(for='selectRole' class="font-weight-bold") Ruolo
+                            select#selectRole.form-control(required="")
+                                option(value="1") Gestore
+                                option(value="2") Amministratore
+                        br
+                        .modal-footer(style="justify-content: space-between")
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Annulla
+                            button#addNewUser.btn.btn-success.btn-lg(type='submit', style="display: none") Salva
+                            button#updateUser.btn.btn-success.btn-lg(type='submit', style="display: none") Modifica
+                            button#deleteUser.btn.btn-danger.btn(type='submit', style="display: none") Elimina
