@@ -321,6 +321,53 @@ router.post('/realtime/rfidshift', function(req, res, next) {
     })
 });
 
+router.post('/realtime/shift/rfidshift', function(req, res, next) {
+    //check logged user
+    //debugger;
+
+    if(!req.body.trips){
+        res.status(422).send("Trips are missing")
+    }
+
+    if(!Array.isArray(req.body.trips)){
+        res.status(422).send("Trips are not valid")
+    }
+
+    let options = {
+        include: {
+            model: TripShift,
+            where: {
+                trip_id: req.body.trips
+            },
+            include: {
+                model: Shift
+            }
+        }
+    }
+
+    if(req.query.check_schedule){
+        options.include.include.include = {
+            model: Schedule,
+            where: {
+                schedule_active: 1
+            }
+        }
+    }
+
+    //get rfid_trip data
+    RfidShift.findAll(options)
+        .then(result => {
+            if(result.length) {
+                //la trip è collegata ad un rfid quindi si procede ad inviare il valore del rfid
+                res.status(200).json({found: true, data: result})
+            }else{
+                res.status(200).json({found: false, error_name: "RFID non trovato"})
+            }
+        }).error(err => {
+        res.status(422).json(err);
+    })
+});
+
 
 
 module.exports = router;
