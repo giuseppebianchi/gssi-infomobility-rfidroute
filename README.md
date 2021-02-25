@@ -288,7 +288,7 @@ journalctl -u rfidroute.service -n [X] --no-pager
 ---
 # Dashboard
 ### Authentication
-The admin area is only reserved to users that works for the public transport agency which provides GTFS data, so creadentials are required for accessing.
+The admin area is only reserved to users that work for the public transport agency which provides GTFS data, so creadentials are required for accessing.
 
 - RFID
 - SHIFT 
