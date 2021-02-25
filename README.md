@@ -1,4 +1,4 @@
-# Rfid Route
+# RfidRoute
 A system to associate RFID cards to shift work of a public transport agency.
 
 Based on Express, Sequalize and Mysql.
@@ -159,7 +159,7 @@ The `rfid_code` property contains the string printed on the corrispondent RFID c
 The `trip_shifts` propery is the list of trips found for a shift.
 
 The `shift` property represents the relative shift associated to the found RFID.
-> Having a *Shift* object into results helps to check if a RFID should be considered to track a vehcile in real time, beacuse if current time is greater than **shift_end** value that RFID in not valid anymore for that shift.
+> Having a *Shift* object into results helps to check if a RFID should be considered to track a vehicle in real time, because if current time is greater than **shift_end** value that RFID in not valid anymore for that shift.
 > (However, if *Shift* object is not available, the validation function will use other parameters to check a valid RFID.)
 ---
 
@@ -253,9 +253,11 @@ systemctl enable rfidroute.service
 
 systemctl start rfidroute.service
 
+```
+Check its execution
+```
 systemctl status rfidroute.service
 ```
-
 ## Stop Service
 ```shell
 systemctl stop rfidroute.service
@@ -270,4 +272,19 @@ systemctl daemon-reload
 systemctl restart rfidroute.service
 ```
 
-
+## Read Log/Output
+Real time
+```
+journalctl -u rfidroute.service -f
+```
+Latest [X] lines from log
+```
+journalctl -u rfidroute.service -n [X] --no-pager
+```
+---
+# Dashboard
+- RFID
+- SHIFT 
+- SERVICE
+- TRIP
+  
