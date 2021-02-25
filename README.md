@@ -1,5 +1,5 @@
 # RfidRoute
-A system to associate RFID cards to shift work of a public transport agency.
+A system to associate RFID cards to shift work of a public transport agency, seen as set of trips from a GTFS file.
 
 Based on Express, Sequalize and Mysql.
 
@@ -180,6 +180,7 @@ const //urlOTP = "http://localhost:8080",
 const baseURL = "http://51.145.149.130/rfidroute";
 const urlOTP = "http://51.145.149.130/infomobility";
 ```
+> This configuration needs that OpenTripPlanner instance is running on `http://51.145.149.130/infomobility`. Otherwise *RfidRoute* can't read GTFS information.
 ---
 - ``view/layout.pug``
 
@@ -190,7 +191,7 @@ base(href="/rfidroute/")
 ---
 - ``.env``
 
-Although systemctl does have its own .env configuration for production, ensure to provide the correct values for DB connections options, PORT and BASEPATH.
+Although systemctl does have its own .env configuration for production, ensure to provide the correct values for DB connection options, PORT and BASEPATH.
 ```dotenv
 DB_HOST = localhost
 DB_USER = rfidroute
@@ -201,14 +202,17 @@ BASEPATH = /rfidroute/
 ```
 
 # Systemd Service Configuration
-Create service if it doesn't exist.
+Create a Sytemd Service if it doesn't exist.
 ```
 cd /etc/systemd/system/ 
 
 touch rfidroute.service
 ```
 
-`rfidroute.service`
+Open `rfidroute.service` with text editor:
+```shell
+nano rfidroute.service
+```
 ```shell
 [Unit]
 Description=Node.js RFID-ROUTE App
@@ -283,6 +287,9 @@ journalctl -u rfidroute.service -n [X] --no-pager
 ```
 ---
 # Dashboard
+### Authentication
+The admin area is only reserved to users that works for the public transport agency which provides GTFS data, so creadentials are required for accessing.
+
 - RFID
 - SHIFT 
 - SERVICE
