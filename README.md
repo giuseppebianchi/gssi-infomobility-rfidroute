@@ -170,28 +170,30 @@ To avoid further edits and configuration with systemd` service, that handles thi
 In order to respect the correct path and urls, because of virtual hosting, we need to change these configuration options before deploying:
 
 - `public/javascripts/config.js`
+> Domain Name required in url to prevent unexepected redirects.
 ```js
-const //urlOTP = "http://localhost:8080",
+// OTP URLs
+const urlOTP = "http://trasporti.opendatalaquila.it/infomobility",
     routesAPI = "/otp/routers/default/index/routes/",
     patternsAPI = "/otp/routers/default/index/patterns/",
     tripsAPI = "";
 
-//const baseURL = "http://localhost:4000"
-const baseURL = "http://51.145.149.130/rfidroute";
-const urlOTP = "http://51.145.149.130/infomobility";
+// RFIDROUTE URL
+const baseURL = "http://trasporti.opendatalaquila.it/rfidroute";
 ```
-> This configuration needs that OpenTripPlanner instance is running on `http://51.145.149.130/infomobility`. Otherwise *RfidRoute* can't read GTFS information.
+> This configuration needs that OpenTripPlanner instance is running on `http://trasporti.opendatalaquila.it/infomobility`. Otherwise *RfidRoute* can't read GTFS information to build *Shift* work with trips.
 ---
 - ``view/layout.pug``
 
 Please change the ``basepath`` tag in such way that relative paths in HTML can point to (`rfidroute`) server with virtal hosting.
 ```js
 base(href="/rfidroute/")
+//base(href="/")
 ```
 ---
 - ``.env``
 
-Although systemctl does have its own .env configuration for production, ensure to provide the correct values for DB connection options, PORT and BASEPATH.
+Although systemctl does have its own .env configuration ready for production, ensure to provide the correct values for DB connection options, PORT and BASEPATH.
 ```dotenv
 DB_HOST = localhost
 DB_USER = rfidroute
@@ -202,7 +204,7 @@ BASEPATH = /rfidroute/
 ```
 
 # Systemd Service Configuration
-Create a Sytemd Service if it doesn't exist.
+Create a Systemd Service if it doesn't exist.
 ```
 cd /etc/systemd/system/ 
 
@@ -290,6 +292,7 @@ journalctl -u rfidroute.service -n [X] --no-pager
 ### Authentication
 The admin area is only reserved to users that work for the public transport agency which provides GTFS data, so creadentials are required for accessing.
 
+### Pages
 - RFID
 - SHIFT 
 - SERVICE
